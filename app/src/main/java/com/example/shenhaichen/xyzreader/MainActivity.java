@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar_detail);
 
 
         final View toolbarContainerView = findViewById(R.id.toolbar_container);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout =  findViewById(R.id.swipe_refresh_layout);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
+        //非对称gridLayout,类似瀑布流
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
@@ -196,9 +197,9 @@ public class MainActivity extends AppCompatActivity implements
 
         public ViewHolder(View view) {
             super(view);
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.article_title);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+            thumbnailView =  view.findViewById(R.id.thumbnail);
+            titleView = view.findViewById(R.id.article_title);
+            subtitleView =  view.findViewById(R.id.article_subtitle);
         }
     }
 }

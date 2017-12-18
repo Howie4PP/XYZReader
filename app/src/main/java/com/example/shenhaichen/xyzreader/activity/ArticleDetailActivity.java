@@ -5,40 +5,44 @@ import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
+import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.shenhaichen.xyzreader.R;
 import com.example.shenhaichen.xyzreader.data.ArticleLoader;
 import com.example.shenhaichen.xyzreader.data.ItemsContract;
 import com.example.shenhaichen.xyzreader.fragment.ArticleDetailFragment;
+import com.example.shenhaichen.xyzreader.ui.ImageLoaderHelper;
 
 public class ArticleDetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Cursor mCursor;
     private long mStartId;
-
+    private Toolbar toolbar;
+    private int mMutedColor = 0xFF333333;
     private long mSelectedItemId;
-    private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
-    private int mTopInset;
-
+    private ImageView mPhotoView;
     private ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
-    private View mUpButtonContainer;
-    private View mUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //按照版本设定UI
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
@@ -47,6 +51,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_article_detail);
 
         getLoaderManager().initLoader(0, null, this);
+        mPhotoView = findViewById(R.id.photo);
 
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager =  findViewById(R.id.pager);
@@ -59,7 +64,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
-                mUpButton.animate()
+                toolbar.animate()
                         .alpha((state == ViewPager.SCROLL_STATE_IDLE) ? 1f : 0f)
                         .setDuration(300);
             }
@@ -68,34 +73,11 @@ public class ArticleDetailActivity extends AppCompatActivity
             public void onPageSelected(int position) {
                 if (mCursor != null) {
                     mCursor.moveToPosition(position);
+                    loadImage();
                 }
                 mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
-                updateUpButtonPosition();
             }
         });
-
-        mUpButtonContainer = findViewById(R.id.up_container);
-
-        mUpButton = findViewById(R.id.action_up);
-        mUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSupportNavigateUp();
-            }
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mUpButtonContainer.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                @Override
-                public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-                    view.onApplyWindowInsets(windowInsets);
-                    mTopInset = windowInsets.getSystemWindowInsetTop();
-                    mUpButtonContainer.setTranslationY(mTopInset);
-                    updateUpButtonPosition();
-                    return windowInsets;
-                }
-            });
-        }
 
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
@@ -103,6 +85,38 @@ public class ArticleDetailActivity extends AppCompatActivity
                 mSelectedItemId = mStartId;
             }
         }
+        //设定toolbar
+        toolbar = findViewById(R.id.toolbar_detail);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+
+    }
+
+    private void loadImage(){
+        ImageLoaderHelper.getInstance(this).getImageLoader()
+                .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
+                    @Override
+                    public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                        Bitmap bitmap = imageContainer.getBitmap();
+                        if (bitmap != null) {
+                            Palette p = Palette.generate(bitmap, 12);
+                            mMutedColor = p.getDarkMutedColor(0xFF333333);
+                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                });
     }
 
     @Override
@@ -110,6 +124,11 @@ public class ArticleDetailActivity extends AppCompatActivity
         return ArticleLoader.newAllArticlesInstance(this);
     }
 
+    /**
+     * 加载数据
+     * @param cursorLoader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mCursor = cursor;
@@ -118,11 +137,11 @@ public class ArticleDetailActivity extends AppCompatActivity
         // Select the start ID
         if (mStartId > 0) {
             mCursor.moveToFirst();
-            // TODO: optimize
             while (!mCursor.isAfterLast()) {
                 if (mCursor.getLong(ArticleLoader.Query._ID) == mStartId) {
                     final int position = mCursor.getPosition();
-                    mPager.setCurrentItem(position, false);
+                    //这里有修改过，false 改成 true
+                    mPager.setCurrentItem(position, true);
                     break;
                 }
                 mCursor.moveToNext();
@@ -137,18 +156,6 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPagerAdapter.notifyDataSetChanged();
     }
 
-    public void onUpButtonFloorChanged(long itemId, ArticleDetailFragment fragment) {
-        if (itemId == mSelectedItemId) {
-            mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
-            updateUpButtonPosition();
-        }
-    }
-
-    private void updateUpButtonPosition() {
-        int upButtonNormalBottom = mTopInset + mUpButton.getHeight();
-        mUpButton.setTranslationY(Math.min(mSelectedItemUpButtonFloor - upButtonNormalBottom, 0));
-    }
-
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -159,8 +166,6 @@ public class ArticleDetailActivity extends AppCompatActivity
             super.setPrimaryItem(container, position, object);
             ArticleDetailFragment fragment = (ArticleDetailFragment) object;
             if (fragment != null) {
-                mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
-                updateUpButtonPosition();
             }
         }
 
