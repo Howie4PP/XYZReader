@@ -11,7 +11,7 @@
 </ol>
 <h4>修改</h4>
 <ol>
-<li>因为个人兴趣，所以优先修改的是具体页面的图片问题，使用到了CoordinatorLayout,以及AppCompat 扩展而来的应用主题。AppBar和Toolbar<br>进行设置</li>
+<li>因为个人兴趣，所以优先修改的是具体页面的图片问题，使用到了CoordinatorLayout,以及AppCompat 扩展而来的应用主题。AppBar和Toolbar进行设置</li>
 <li>追加动画效果</li>
 </ol>
 
