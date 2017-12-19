@@ -12,7 +12,7 @@
 <ol>
 <li>因为个人兴趣，所以优先修改的是具体页面的toolbar问题，使用到了CoordinatorLayout,以及AppCompat 扩展而来的应用主题。AppBar和Toolbar进行设置</li>
 <li>追加动画效果</li>
-<li>调整ImageButton为FloatingActionButton</li>
+<li>调整ImageButton为FloatingActionButton, 为了避免影响阅读，将floatingActionBar的大小设为mini</li>
 <li>调整detail页的颜色使用</li>
 </ol>
 
