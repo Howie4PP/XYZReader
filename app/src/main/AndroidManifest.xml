@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ArticleDetailActivity"
-             android:theme="@style/Theme.Bacon"
+             android:theme="@style/Theme.Bacon.Detail"
             >
             <intent-filter >
                 <action android:name="android.intent.action.VIEW" />
