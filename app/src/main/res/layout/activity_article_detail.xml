@@ -47,6 +47,21 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/share_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right|end"
+        app:fabSize="normal"
+        app:pressedTranslationZ="12dp"
+        app:elevation="@dimen/fab_elevation"
+        app:rippleColor="@color/light_gray"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@drawable/add_fab_background"
+        android:contentDescription="@string/action_share"
+        android:src="@drawable/ic_share"
+        android:stateListAnimator="@animator/fab_state_list_anim" />
+
 </android.support.design.widget.CoordinatorLayout>
 
 
