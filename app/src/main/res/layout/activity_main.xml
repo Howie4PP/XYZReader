@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.shenhaichen.xyzreader.MainActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -27,26 +26,25 @@
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
-        android:background="?colorPrimary"
+        android:layout_height="100dp"
+        android:background="@color/theme_primary"
         android:elevation="8dp">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_detail"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_gravity="bottom"
             android:layout_marginLeft="@dimen/list_toolbar_side_margin"
             android:layout_marginRight="@dimen/list_toolbar_side_margin"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
+            >
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/app_name"
+                android:layout_marginLeft="@dimen/logo_margin_left"
                 android:src="@drawable/logo" />
-
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

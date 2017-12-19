@@ -7,5 +7,7 @@
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">12dp</dimen>
+    <dimen name="logo_margin_left">36dp</dimen>
+    <dimen name="pic_margin">3dp</dimen>
 
 </resources>
