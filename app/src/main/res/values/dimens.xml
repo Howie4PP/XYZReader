@@ -4,11 +4,11 @@
     <dimen name="detail_body_text_size">22sp</dimen>
     <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
 
-    <dimen name="all_elevation">6dp</dimen>
+    <dimen name="all_elevation">4dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">12dp</dimen>
     <dimen name="logo_margin_left">36dp</dimen>
-    <dimen name="pic_margin">3dp</dimen>
+    <dimen name="logo_margin_top">16dp</dimen>
     <dimen name="left_space">16dp</dimen>
     <dimen name="right_space">0dp</dimen>
     <dimen name="top_space">6dp</dimen>
