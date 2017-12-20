@@ -22,7 +22,7 @@
 
     <style name="Theme.Bacon.Detail" parent="@style/Theme.Bacon">
         <item name="android:statusBarColor">@color/theme_primary</item>
-        <item name="android:textColorPrimary">@color/white</item>
+
         <item name="colorPrimary">@color/theme_primary</item>
     </style>
 
